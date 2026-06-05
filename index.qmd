@@ -15,21 +15,21 @@ worth learning.
 
 You will only need to complete steps 1–3 once.
 
-1. **Fork the repository**. Navigate to the
+**Fork the repository**. Navigate to the
 [2026-RLAB-Practical-Exercises](https://github.com/bhelsel/2026-RLAB-Practical-Exercises)
 GitHub repository and click Fork in the top-right corner. This creates your own
 personal copy of the repository under your GitHub account.
 
-2. **Clone your fork**. Copy your forked repository to your local machine:
+**Clone your fork**. Copy your forked repository to your local machine:
 
-```{bash}
+```bash
 git clone https://github.com/YOUR-USERNAME/2026-RLAB-Practical-Exercises.git
 ```
 
-    View [GitHub documentation](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) 
-    for more information on cloning.
+View [GitHub documentation](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) 
+for more information on cloning.
 
-3. **Add to your folder**. All weekly submissions should be saved in the `code/`
+**Add to your folder**. All weekly submissions should be saved in the `code/`
 directory within the folder named for you. A template file is provided to help
 you get started on each exercise. Feel free to modify the template and add any
 additional code, notes, or documentation you find helpful.
@@ -38,34 +38,31 @@ additional code, notes, or documentation you find helpful.
 
 Repeat these steps each week after completing the practical exercise.
 
-1. **Add your file**. Save your completed exercise as a .qmd file within the
+**Add your file**. Save your completed exercise as a .qmd file within the
 folder named for you. Make sure the file has a title, subtitle, author, and date
 in the YAML header:
 
-```{yaml}
+```yaml
 ---
 title: "Week 1: Basics in R"
 subtitle: "Practice Reading and Manipulating Data"
 date: 2026-06-24
 ---
 ```
-
 You can also add an optional image to be displayed on your list of submissions.
 Each exercise should have `echo` set to true to display the code and `eval` set
 to true to evaluate the code blocks. 
 
-2. **Commit and push**. From your local repository, stage, commit, and push your
+**Commit and push**. From your local repository, stage, commit, and push your
 changes using `git` commands (see below), your integrated development
 environment (e.g., R Studio, Positron, VS Code), or GitHub Desktop.
 
-```{bash}
+```bash
 git add
 git commit -m "Add week 1 exercise"
 git push origin main
 ```
-
-    
-3. **Open a pull request**. Go to your forked repository on GitHub and click
+**Open a pull request**. Go to your forked repository on GitHub and click
 Contribute > Open pull request. Add a brief title (e.g., "Week 1 submission -
 Firstname Lastname") and click Create Pull Request. Your work will be reviewed
 and merged into the main repository.

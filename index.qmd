@@ -71,3 +71,7 @@ will be arranged according to the date in the YAML.
 GitHub (Sync fork > Update branch) before pushing new work to avoid merge
 conflicts. This should not happen if content is only being changed in
 participant folders.
+
+## Quarto Website
+
+[https://bhelsel.github.io/2026-RLAB-Practical-Exercises/](https://bhelsel.github.io/2026-RLAB-Practical-Exercises/)

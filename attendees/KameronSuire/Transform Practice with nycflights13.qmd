@@ -1,0 +1,189 @@
+---
+title: "Transform Practice with nycflights13"
+format: html
+author: "Kameron Suire"
+---
+
+## Load Packages
+
+First, we load the packages we need.
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+library(lubridate)
+library(gtsummary)
+library(flextable)
+```
+
+## Starting Data
+
+The `nycflights13` package has several data sets. For this assignment, we start with the `flights` data.
+
+```{r}
+flights <- nycflights13::flights
+```
+
+## Filter by Air Time
+
+We only want flights that were at least 2 hours but less than 4 hours.
+
+Since `air_time` is measured in minutes:
+
+- 2 hours = 120 minutes
+- 4 hours = 240 minutes
+
+```{r}
+flights <- flights |>
+  filter(
+    air_time >= 120,
+    air_time < 240
+  )
+```
+
+## Create Date and Time Variables
+
+The data has separate columns for `year`, `month`, and `day`.
+
+We combine those into one true date variable.
+
+Then we use `dep_time` and `arr_time` to create full departure and arrival timestamps.
+
+The `sprintf("%04d", x)` part makes sure times always have 4 digits.
+
+For example:
+
+- `517` becomes `"0517"`
+- `50` becomes `"0050"`
+
+```{r}
+flights <- flights |>
+  mutate(
+    date = make_date(year, month, day),
+    
+    dep_time_padded = sprintf("%04d", dep_time),
+    arr_time_padded = sprintf("%04d", arr_time),
+    
+    dep_timestamp = ymd_hm(
+      paste(
+        date,
+        str_sub(dep_time_padded, 1, 2),
+        str_sub(dep_time_padded, 3, 4)
+      )
+    ),
+    
+    arr_timestamp = ymd_hm(
+      paste(
+        date,
+        str_sub(arr_time_padded, 1, 2),
+        str_sub(arr_time_padded, 3, 4)
+      )
+    )
+  )
+```
+
+## Filter by Flight Details
+
+Now we keep only flights going to:
+
+- Orlando = `MCO`
+- Fort Lauderdale = `FLL`
+- Miami = `MIA`
+
+And only flights from:
+
+- American Airlines = `AA`
+- Delta Air Lines = `DL`
+- United Airlines = `UA`
+
+```{r}
+flights <- flights |>
+  filter(
+    dest %in% c("MCO", "FLL", "MIA"),
+    carrier %in% c("AA", "DL", "UA")
+  )
+```
+
+## Create Factor Variables
+
+Right now, `carrier` and `dest` are short codes.
+
+We turn them into factor variables with easier-to-read labels.
+
+```{r}
+flights <- flights |>
+  mutate(
+    carrier = factor(
+      carrier,
+      levels = c("AA", "DL", "UA"),
+      labels = c("American Airlines", "Delta Air Lines", "United Airlines")
+    ),
+    
+    dest = factor(
+      dest,
+      levels = c("MCO", "FLL", "MIA"),
+      labels = c("Orlando", "Fort Lauderdale", "Miami")
+    )
+  )
+```
+
+## Join Flights with Weather
+
+The weather data has temperature and wind speed.
+
+To join weather to flights, we match using:
+
+- `origin`
+- `time_hour`
+
+These tell R which airport and hour the weather belongs to.
+
+```{r}
+weather_small <- nycflights13::weather |>
+  select(origin, time_hour, temp, wind_speed)
+
+flights <- flights |>
+  left_join(weather_small, by = c("origin", "time_hour"))
+```
+
+## Check the Final Data
+
+This lets us confirm that `temp` and `wind_speed` were added.
+
+```{r}
+names(flights)
+```
+
+## Summary Table
+
+Finally, we make a table that summarizes destination, temperature, wind speed, time in the air, and distance by airline.
+
+```{r}
+flights |>
+  dplyr::select(carrier, dest, temp, wind_speed, air_time, distance) |>
+  gtsummary::tbl_summary(
+    by = carrier,
+    missing = "no",
+    statistic = gtsummary::all_continuous() ~ "{mean} ± {sd}",
+    type = distance ~ "continuous",
+    label = list(
+      dest ~ "Destination",
+      temp ~ "Temperature",
+      wind_speed ~ "Wind Speed",
+      air_time ~ "Time in the Air",
+      distance ~ "Distance"
+    )
+  ) |>
+  gtsummary::as_flex_table()
+```
+
+## What This Assignment Practiced
+
+In this assignment, we practiced several important `dplyr` skills:
+
+- `filter()` to keep certain rows
+- `mutate()` to create new variables
+- `factor()` to make readable category labels
+- `select()` to keep certain columns
+- `left_join()` to combine two data sets
+- `tbl_summary()` to make a clean summary table

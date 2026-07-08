@@ -1,0 +1,290 @@
+---
+title: "Penguin Scatterplot"
+format: html
+---
+
+## Activity 1: Fill in the Blanks
+
+### Goal
+
+In this activity, we are building a scatterplot that shows the relationship between penguin bill length and penguin bill depth.
+
+We will also color the points by species so we can compare the different penguin groups.
+
+### Step 1: Load the packages
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+The `tidyverse` package gives us `ggplot2`, which we use to make plots.
+
+The `palmerpenguins` package gives us the `penguins` dataset.
+
+### Step 2: Start the plot
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species
+  )
+)
+```
+
+This starts the plot.
+
+Here is what each part means:
+
+`data = penguins` means we are using the penguins dataset.
+
+`x = bill_length_mm` means bill length goes on the x-axis.
+
+`y = bill_depth_mm` means bill depth goes on the y-axis.
+
+`color = species` means each penguin species gets a different color.
+
+### Step 3: Add the points
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species
+  )
+) +
+  geom_point()
+```
+
+`geom_point()` creates a scatterplot.
+
+Each dot is one penguin.
+
+### Step 4: Add labels
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species
+  )
+) +
+  geom_point() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)",
+    color = "Species"
+  )
+```
+
+The `labs()` function lets us change the plot labels.
+
+The variable name is `bill_depth_mm`, but the reader-friendly label is `"Bill depth (mm)"`.
+
+### Step 5: Add a clean theme
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species
+  )
+) +
+  geom_point() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)",
+    color = "Species"
+  ) +
+  theme_minimal()
+```
+
+`theme_minimal()` makes the plot look cleaner.
+
+### Step 6: Center the title
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species
+  )
+) +
+  geom_point() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)",
+    color = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+`hjust = 0.5` centers the title.
+
+Think of it like this:
+
+`hjust = 0` means left aligned.
+
+`hjust = 0.5` means centered.
+
+`hjust = 1` means right aligned.
+
+### Step 7: Add shape for accessibility
+
+This is the bonus part.
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species,
+    shape = species
+  )
+) +
+  geom_point() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)",
+    color = "Species",
+    shape = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+Now species is shown in two ways:
+
+Color shows species.
+
+Shape also shows species.
+
+This is helpful because some people may have trouble seeing color differences.
+
+### Final Code
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species,
+    shape = species
+  )
+) +
+  geom_point() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)",
+    color = "Species",
+    shape = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+### What this plot shows
+
+This plot lets us compare bill length and bill depth across penguin species.
+
+Each dot is one penguin.
+
+The x-axis shows bill length.
+
+The y-axis shows bill depth.
+
+The color and shape show the species.
+
+This makes it easier to see whether different penguin species have different bill sizes.
+
+## Activity 1: Fill in the Blanks
+
+Before looking at the completed solution, see if you can fill in each blank yourself.
+
+```{r}
+ggplot(
+  ___ = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = ___,
+    color = ___
+  )
+) +
+  ___() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "___",
+    color = "___"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(___ = 0.5),
+    plot.subtitle = element_text(___ = 0.5)
+  )
+```
+
+### My Answers
+
+| Blank | Your Answer | Correct Answer | Why? |
+|:------|:------------|:---------------|:------|
+| 1 | | `data` | Tells `ggplot()` which dataset to use. |
+| 2 | | `bill_depth_mm` | Places bill depth on the y-axis. |
+| 3 | | `species` | Colors each penguin species differently. |
+| 4 | | `geom_point()` | Creates a scatterplot. |
+| 5 | | `"Bill depth (mm)"` | Human-readable y-axis label. |
+| 6 | | `"Species"` | Human-readable legend title. |
+| 7 | | `hjust` | Centers the plot title (`0.5` = center). |
+| 8 | | `hjust` | Centers the plot subtitle. |
+
+### Check Yourself
+
+Your completed code should look like this:
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(
+    x = bill_length_mm,
+    y = bill_depth_mm,
+    color = species
+  )
+) +
+  geom_point() +
+  labs(
+    title = "Bill length and bill depth by species",
+    x = "Bill length (mm)",
+    y = "Bill depth (mm)",
+    color = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5)
+  )
+```

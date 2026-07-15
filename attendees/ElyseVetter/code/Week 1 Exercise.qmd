@@ -1,7 +1,7 @@
 ---
-title: "Practical Exercise Template"
-subtitle: "Adjust the YAML each week when doing a new exercise"
-author: Mason McClarnon
+title: "The Whole Game Practice"
+subtitle: "My First Github Push"
+author: Elyse Vetter
 date: 2026-06-24
 image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
 execute: 
@@ -11,9 +11,16 @@ execute:
   warning: false
 ---
 
-**Assignment**. Add assignment details here. Update this section with the
-current week's tasks or instructions, and any additional resources to complete
-the assignment.
+**Assignment**. Practice for Dr. Julianne Clina's introduction to R presentation. 
+This Quarto document will be used to practice my first GitHub pull request.
+
+```{r}
+
+# Hello R-LAB
+message("My first GitHub push worked!")
+x <- 1:10
+mean(x)
+```
 
 ## Introduction to dplyr
 
@@ -24,7 +31,6 @@ library(dplyr)
 starwars |>
   mutate(bmi = mass / ((height / 100)^2)) |>
   select(name:mass, bmi)
-
 ```
 
 ## Introduction to ggplot2
@@ -35,5 +41,4 @@ library(ggplot2)
 
 ggplot(mpg, aes(displ, hwy, colour = class)) +
   geom_point()
-
 ```

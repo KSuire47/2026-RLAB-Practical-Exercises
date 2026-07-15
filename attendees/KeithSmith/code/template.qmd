@@ -1,7 +1,7 @@
 ---
 title: "Practical Exercise Template"
 subtitle: "Adjust the YAML each week when doing a new exercise"
-author: Mason McClarnon
+author: "Keith Smith"
 date: 2026-06-24
 image: "https://github.com/bhelsel/2026-RLAB-Practical-Exercises/raw/main/images/rlab-placeholder.png"
 execute: 
@@ -37,3 +37,4 @@ ggplot(mpg, aes(displ, hwy, colour = class)) +
   geom_point()
 
 ```
+

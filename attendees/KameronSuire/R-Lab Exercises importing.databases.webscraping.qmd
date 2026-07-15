@@ -1,0 +1,195 @@
+---
+title: "R-LAB 2: Importing Data, Databases, and Web Scraping"
+author: "Kameron Suire"
+format: html
+toc: true
+---
+# Importing Data into R
+
+## Exercise 1: Importing a CSV
+
+### Why this matters
+
+When importing a CSV, R guesses the data type for every column. Most of the time those guesses are correct, but sometimes you need to override them.
+
+For example, a variable like `year` may be treated as a number even though it is really just a label.
+
+## Load packages
+
+```{r}
+library(tidyverse)
+```
+
+## Import the data
+
+```{r}
+penguins_url <- "https://raw.githubusercontent.com/allisonhorst/palmerpenguins/master/inst/extdata/penguins.csv"
+
+penguins <- read_csv(penguins_url)
+
+glimpse(penguins)
+```
+
+### What happened?
+
+- `read_csv()` downloads the file from the internet.
+- R guesses each column type.
+- `glimpse()` lets us quickly inspect the imported dataset.
+
+---
+
+## Force a column type
+
+```{r}
+penguins_year_chr <- read_csv(
+  penguins_url,
+  col_types = cols(
+    year = col_character()
+  )
+)
+
+glimpse(penguins_year_chr)
+```
+
+### What happened?
+
+Instead of allowing R to guess, we explicitly told it that `year` should be stored as text.
+
+This is useful whenever a variable is really an identifier rather than a quantity.
+
+---
+
+# Working with Databases
+
+## Why this matters
+
+Large datasets often live inside databases.
+
+Instead of loading millions of rows into R, we send commands to the database and only download the final result.
+
+## Load packages
+
+```{r}
+library(DBI)
+library(RSQLite)
+library(dbplyr)
+library(palmerpenguins)
+```
+
+## Create an example database
+
+```{r}
+con <- dbConnect(SQLite(), ":memory:")
+
+copy_to(
+  con,
+  palmerpenguins::penguins,
+  "penguins",
+  temporary = FALSE,
+  overwrite = TRUE
+)
+```
+
+## Query the database
+
+```{r}
+penguins_db <- tbl(con, "penguins")
+
+gentoo_summary <- penguins_db |>
+  filter(species == "Gentoo") |>
+  select(species, island, body_mass_g, sex) |>
+  group_by(sex) |>
+  summarise(
+    mean_body_mass_g = mean(body_mass_g, na.rm = TRUE)
+  ) |>
+  collect()
+
+gentoo_summary
+```
+
+### What happened?
+
+- `tbl()` references the database table.
+- `filter()` keeps only Gentoo penguins.
+- `select()` keeps only needed columns.
+- `group_by()` creates groups.
+- `summarise()` calculates averages.
+- `collect()` finally downloads the results into R.
+
+The important idea is that **everything before `collect()` happens inside the database.**
+
+---
+
+# Web Scraping
+
+## Why this matters
+
+Unlike a CSV, a webpage is not already a data frame.
+
+Instead, it contains HTML elements such as headings, paragraphs, images, and tables.
+
+We first locate the tables, then convert them into data frames.
+
+## Load packages
+
+```{r}
+library(rvest)
+library(janitor)
+```
+
+## Read a webpage
+
+```{r}
+url <- "https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)"
+
+tables <- url |>
+  read_html() |>
+  html_elements("table") |>
+  html_table()
+```
+
+## Inspect the tables
+
+```{r}
+length(tables)
+
+glimpse(tables[[1]])
+```
+
+### What happened?
+
+- `read_html()` downloads the webpage.
+- `html_elements("table")` finds every HTML table.
+- `html_table()` converts each table into a data frame.
+- `length()` tells us how many tables were found.
+
+Because multiple tables can exist, R stores them inside a **list**.
+
+---
+
+## Clean the first table
+
+```{r}
+population_table <- tables[[1]] |>
+  select(1:4) |>
+  clean_names()
+
+population_table
+```
+
+### What happened?
+
+- `tables[[1]]` extracts the first table.
+- `select()` keeps the first four columns.
+- `clean_names()` creates R-friendly column names.
+
+---
+
+# Key Takeaways
+
+- Always inspect imported data with `glimpse()`.
+- Override column types when necessary.
+- Use databases for very large datasets.
+- Delay `collect()` until the result is small.
+- Webpages are hierarchical documents.
+- Web scraping often returns lists before data frames.

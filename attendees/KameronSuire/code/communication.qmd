@@ -9,6 +9,8 @@ execute:
   eval: false
   message: false
   warning: false
+format:
+  rlab-html: default
 ---
 
 **Assignment**. Create your own Quarto extension and practice what you have
